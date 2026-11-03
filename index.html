@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#101014"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="VDF Bracket"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png"><title>VDF Bracket</title>
+<style>
+:root{color-scheme:dark;--bg:#101014;--panel:#1b1922;--panel2:#292531;--purple:#b58aff;--muted:#aaa2b8;--line:#74559b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f2ff;font:16px -apple-system,BlinkMacSystemFont,Arial,sans-serif}header{position:sticky;top:0;z-index:4;background:#101014ee;backdrop-filter:blur(10px);padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #282330}.logo{font-size:22px;font-weight:900;color:var(--purple);letter-spacing:1px}main{max-width:1100px;margin:auto;padding:16px 14px 70px}h1{font-size:27px;margin:8px 0}.muted{color:var(--muted);font-size:13px}button,input,textarea{font:inherit}button{background:var(--panel2);border:1px solid #4b3d5e;color:#fff;border-radius:11px;padding:10px 13px;cursor:pointer;touch-action:manipulation}button:active{transform:scale(.98)}button.primary{background:var(--purple);color:#1a1024;border-color:transparent;font-weight:700}input,textarea{background:#111016;border:1px solid #494052;border-radius:10px;color:white;padding:12px;width:100%}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.hidden{display:none!important}.listcard{background:var(--panel);padding:14px;border:1px solid #342c40;border-radius:14px;margin:10px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}.filters{display:flex;gap:7px;margin:15px 0}.filters .active{border-color:var(--purple);color:var(--purple)}.bottom{position:fixed;z-index:4;bottom:0;left:0;right:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#101014ee;border-top:1px solid #30283a}.bottom button{width:100%;max-width:700px;display:block;margin:auto}.workspace{overflow:auto;border:1px solid #2d2637;border-radius:14px;padding:14px;margin-top:12px;min-height:220px}.bracket{position:relative;display:flex;gap:48px;align-items:stretch;width:max-content;min-height:200px}.round{position:relative;z-index:1;width:220px;display:flex;flex-direction:column;justify-content:space-around;gap:16px}.round h3{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:0 0 8px}.battle{position:relative;background:#1b1922;border:1px solid #76559b;border-radius:13px;padding:8px;z-index:1}.battle.three{border-color:var(--purple)}.battlehead{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;margin-bottom:7px}.slot{display:flex;gap:6px;align-items:center;justify-content:space-between;min-height:38px;margin:5px 0;padding:7px 8px;border-radius:8px;background:#2a2732;border:1px solid transparent;font-size:12px;cursor:pointer}.slot.empty{color:#8d859a;border:1px dashed #4a4056}.slot.winner{border-color:var(--purple);background:#3a2b50}.slot.loser{opacity:.45}.slot .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.slot button{font-size:10px;padding:5px 7px;background:#4a365e;border:0}.tools{display:flex;gap:5px;margin-top:8px}.tools button{flex:1;font-size:10px;padding:7px 4px}.tools button.delete{border-color:#8a3d50;color:#ffb5c2}.connector{fill:none;stroke:#76559b;stroke-width:2.5;opacity:.75}.connector.active{stroke:#d7b7ff;stroke-width:3.2;opacity:1}.connector.inactive{opacity:.35}.note{background:#1a1721;border:1px solid #3a3047;border-radius:11px;padding:10px;color:var(--muted);font-size:12px;line-height:1.5;margin:12px 0}.modalbg{position:fixed;inset:0;background:#000a;z-index:10;display:flex;align-items:flex-end}.modal{width:100%;max-width:600px;margin:auto;background:#1c1923;border:1px solid #493b5b;border-radius:20px 20px 0 0;padding:18px;padding-bottom:calc(18px + env(safe-area-inset-bottom));max-height:80vh;overflow:auto}.modal button{display:block;width:100%;margin-top:8px;text-align:left}.empty{text-align:center;color:var(--muted);padding:28px}@media print{header,.no-print,.bottom{display:none!important}body{background:white;color:#111}.workspace{overflow:visible}.bracket{transform:none}.battle{background:white;color:#111}.slot{background:#eee;color:#111}.connector{stroke:#555}}
+
+/* Visual refresh: clearer hierarchy, spacing and touch targets */
+:root{--bg:#0d0b12;--panel:#17131f;--panel2:#251e31;--purple:#c29aff;--muted:#b6adc5;--line:#76559b}
+body{background:radial-gradient(ellipse at top,#21172f 0%,var(--bg) 55%);line-height:1.4}
+header{padding:14px 18px;border-bottom-color:#392b4b;box-shadow:0 8px 24px #0002}
+.logo{font-size:23px;letter-spacing:1.5px}
+main{max-width:1200px;padding:20px 16px 100px}
+h1{font-size:clamp(25px,4vw,32px);letter-spacing:-.5px}
+button{min-height:42px;border-radius:12px;transition:background .15s,border-color .15s}
+button:hover{border-color:var(--purple)}
+button.primary{box-shadow:0 5px 18px #b58aff25}
+.listcard{background:linear-gradient(135deg,#1d1728,#17131f);border-color:#3b2d4e;padding:16px;border-radius:16px;box-shadow:0 8px 22px #0002}
+.filters{flex-wrap:wrap}.filters button{padding:9px 14px}
+.workspace{background:#0b0910;border-color:#3a2b4b;padding:18px;border-radius:16px;box-shadow:inset 0 1px 0 #ffffff08}
+.bracket{gap:58px;padding:4px 2px 12px}
+.round{width:232px;gap:22px}
+.round h3{font-size:12px;letter-spacing:1.4px;margin-bottom:10px;color:#c4b4d9}
+.battle{background:linear-gradient(145deg,#201a2b,#17131f);border-color:#59416f;border-radius:15px;padding:10px;box-shadow:0 8px 18px #0003}
+.battle.three{border-color:var(--purple);box-shadow:0 0 0 1px #c29aff18,0 8px 20px #0003}
+.battlehead{font-size:12px;margin-bottom:9px;color:#c6b8d6}
+.slot{min-height:43px;padding:8px 9px;border-radius:10px;font-size:13px;background:#2a2335;border-color:#ffffff08}
+.slot.empty{background:#17131f;color:#a89bb9;border-color:#5c4b6e}
+.slot.winner{background:#3d2b54;border-color:#d0adff;box-shadow:inset 3px 0 #c29aff}
+.slot button{min-height:30px;border-radius:8px;font-size:11px;padding:5px 8px;white-space:nowrap}
+.tools{gap:6px;margin-top:10px}.tools button{min-height:36px;border-radius:9px;font-size:11px}
+.note{background:#191321;border-color:#49345f;color:#c3b8d0;padding:13px 14px;border-radius:13px;font-size:13px}
+.modal{background:#191321;border-color:#57416d;border-radius:22px 22px 0 0;padding:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+.modal button{min-height:46px;border-radius:12px}
+.bottom{background:#100d16ed;border-top-color:#392b4b;backdrop-filter:blur(12px)}
+.round .slot.locked{cursor:default}.addBattleBtn{width:100%;border:1px dashed var(--purple);background:#1a1324;color:var(--purple);font-weight:700;margin-top:4px}.round .addBattleBtn{flex-shrink:0}
+.participantRows{display:grid;gap:8px;margin:10px 0 16px}.participantRow{display:flex;gap:8px;align-items:center}.participantRow input{min-width:0}.participantRow .rowNo{color:var(--muted);font-size:12px;min-width:20px}.createOptions{display:flex;align-items:center;gap:10px;margin:14px 0;padding:12px;background:var(--panel);border:1px solid #3a2b4b;border-radius:12px}.createOptions input{width:20px;height:20px;accent-color:var(--purple)}.zoomBar{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:12px}.zoomBar button{min-width:44px}.zoomLabel{font-size:12px;color:var(--muted);min-width:44px;text-align:center}.workspace{touch-action:pan-x pan-y;overscroll-behavior:contain}
+@media(max-width:600px){header{padding:12px 14px}main{padding:15px 12px 100px}.workspace{padding:12px}.bracket{gap:42px}.round{width:215px}.listcard{align-items:flex-start}.listcard .row{justify-content:flex-end}}
+
+/* VDF UI polish v2: clearer button roles and visual hierarchy (styles only) */
+:root{--accent:#c29aff;--system:#83c9ff;--system-bg:#172536;--danger:#ff8f9b;--danger-bg:#321d29;--success:#9be2c0}
+button{font-weight:650;letter-spacing:.05px;box-shadow:0 1px 0 #ffffff08 inset}
+button:focus-visible,input:focus-visible{outline:2px solid var(--system);outline-offset:2px}
+button.primary,#createBtn,#newBtn{background:linear-gradient(135deg,#d2b2ff,#b78aff);color:#211431;border:0;box-shadow:0 5px 18px #b58aff35;font-weight:800}
+/* System/navigation actions: blue tint, visually distinct from tournament actions */
+#homeBtn,#back,#undo,#addParticipant,#printBtn,#zoomOut,#zoomIn,#zoomReset,#addNameRow{background:var(--system-bg);border:1px solid #36536d;color:#b9e2ff}
+#homeBtn,#back{padding-inline:16px}
+#undo{border-color:#4b4770;color:#d4c9ff;background:#211e35}
+#printBtn{border-color:#42645b;color:#b6efd4;background:#172922}
+#zoomOut,#zoomIn,#zoomReset{min-height:40px}
+#zoomIn{background:#20344a;border-color:#5a91bc;color:#d7efff}
+/* Destructive actions */
+button.delete{background:var(--danger-bg)!important;border:1px solid #75404d!important;color:#ffb8c0!important}
+/* Tournament filters and compact toolbars */
+.filters{padding:5px;background:#100d17;border:1px solid #34283f;border-radius:14px;width:max-content;max-width:100%}
+.filters button{background:transparent;border-color:transparent;color:#bdb2ca;min-height:38px}
+.filters button.active{background:#302340;border-color:#72569a;color:#eadbff;box-shadow:0 2px 10px #0003}
+#detail>.row.no-print{padding:10px;background:#15111d;border:1px solid #34283f;border-radius:14px;gap:8px}
+#detail>.row.no-print button{flex:1}
+#detail>.row:first-child{align-items:center;margin-bottom:10px}
+#detailTitle{margin-bottom:2px}
+.note{border-left:3px solid #8f70b5}
+/* Participant form: clearer field grouping */
+#tourName,.participantRow input{background:#15111d;border-color:#493b5b}
+.participantRow{background:#17131f;border:1px solid #30263b;border-radius:12px;padding:5px 8px}
+.participantRow .rowNo{font-weight:800;color:#c9b4e7}
+.createOptions{border-color:#59416f;background:#1b1525}
+#createBtn{min-width:160px}
+#cancelCreate{background:#25202e;border-color:#51465e;color:#d6cde0}
+/* Battle actions: format is a neutral/system control; delete remains clearly destructive */
+.tools button.formatToggle{background:#1a2b3b;border:1px solid #42617d;color:#bfe4ff}
+.battlehead span:last-child{background:#30243e;border:1px solid #5a4472;border-radius:999px;padding:3px 8px;color:#e0ccff}
+.battle.three .battlehead span:last-child{background:#392b50;border-color:#a27bd0;color:#eadbff}
+.slot button{background:#403054;border:1px solid #76599a;color:#eadbff;font-weight:750}
+.slot.winner button{background:#31513f;border-color:#5c9875;color:#c6f4d8}
+.addBattleBtn{min-height:46px;background:#171321;border:1px dashed #9b7ac1;color:#d9c1f5}
+/* List cards: separate open action from overflow menu */
+.listcard .row button[data-open]{background:#203247;border-color:#42617d;color:#c5e6ff;min-width:92px}
+.listcard .row button[data-menu]{min-width:44px;background:#25202e;border-color:#51465e;color:#d8cde5}
+/* More consistent mobile touch targets */
+@media(max-width:600px){
+  button{min-height:44px}
+  #detail>.row.no-print{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  #detail>.row.no-print button{padding:9px 6px;font-size:13px}
+  .zoomBar{justify-content:space-between;background:#15111d;border:1px solid #34283f;border-radius:12px;padding:7px}
+  .zoomBar button{flex:1}
+  .filters{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}
+  .filters button{padding:8px 5px;font-size:13px}
+  .listcard{align-items:center}
+  .listcard .row{flex-wrap:nowrap}
+}
+
+</style></head><body>
+<header><div><div class="logo">VDF BRACKET</div><div class="muted">TOURNAMENT BUILDER</div></div><button id="homeBtn" class="no-print">Турниры</button></header>
+<main>
+<section id="home"><h1>Турниры</h1><p class="muted">Создай сетку, перемещай участников и выбирай победителей.</p><div class="filters no-print"><button class="active" data-filter="all">Все</button><button data-filter="active">В процессе</button><button data-filter="done">Завершённые</button></div><div id="tourList"></div></section>
+<section id="create" class="hidden"><h1>Новый турнир</h1><label class="muted">Название</label><input id="tourName" placeholder="Название турнира"><label class="muted" style="display:block;margin:14px 0 7px">Участники</label><p class="muted">Впиши каждого участника в отдельную строку. По умолчанию — 3 строки.</p><div id="participantRows" class="participantRows"></div><button id="addNameRow" type="button">＋ Добавить строку</button><label class="createOptions"><input type="checkbox" id="randomizeNames"><span><b>Распределить участников случайно</b><br><span class="muted">Если выключено, бои останутся пустыми.</span></span></label><div class="row" style="margin-top:14px"><button id="createBtn" class="primary">Создать сетку</button><button id="cancelCreate">Отмена</button></div></section>
+<section id="detail" class="hidden"><div class="row" style="justify-content:space-between"><div><h1 id="detailTitle"></h1><p id="detailMeta" class="muted"></p></div><button id="back">Назад</button></div><div class="row no-print"><button id="undo">↶ Отменить</button><button id="addParticipant">+ Участник</button><button id="printBtn">Печать</button></div><div class="note no-print">Состав участников и формат боёв меняются только в 1-м раунде. В следующих раундах нажимай «Победа», чтобы провести участника дальше по стрелке. Стрелки показывают путь победителей. Если в раунде нечётное число боёв, последние три ведут в бой на 3 угла.</div><div class="zoomBar no-print"><button id="zoomOut" aria-label="Уменьшить сетку">−</button><span id="zoomLabel" class="zoomLabel">100%</span><button id="zoomIn" aria-label="Увеличить сетку">＋</button><button id="zoomReset">Сброс</button></div><div id="workspace" class="workspace"><div id="bracket" class="bracket"></div></div></section>
+</main><div id="bottom" class="bottom no-print"><button id="newBtn" class="primary">＋ Создать турнир</button></div><div id="modalRoot"></div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);let tours=[];try{tours=JSON.parse(localStorage.getItem('vdf-working-tours')||'[]')}catch(e){tours=[]}let current=null,filter='all',history=[],bracketZoom=1,pinchStart=null;
+const uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function save(){localStorage.setItem('vdf-working-tours',JSON.stringify(tours))}function syncCurrent(){tours=tours.map(t=>t.id===current.id?current:t);save()}function show(which){['home','create','detail'].forEach(id=>$(id).classList.toggle('hidden',id!==which));$('bottom').classList.toggle('hidden',which!=='home');$('homeBtn').classList.toggle('hidden',which==='home')}
+function renderHome(){const list=tours.filter(t=>filter==='all'||(filter==='done'?t.done:!t.done));$('tourList').innerHTML=list.length?list.map(t=>`<div class="listcard"><div><b>${esc(t.name)}</b><div class="muted">${t.names.length} участников · ${t.done?'Завершён':'В процессе'}</div></div><div class="row"><button data-open="${t.id}">Открыть</button><button data-menu="${t.id}">•••</button></div></div>`).join(''):'<div class="empty">Пока нет турниров. Нажми «Создать турнир».</div>';document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openTour(b.dataset.open));document.querySelectorAll('[data-menu]').forEach(b=>b.onclick=()=>tourMenu(b.dataset.menu))}
+function modal(title,opts){$('modalRoot').innerHTML=`<div class="modalbg" id="modalBg"><div class="modal"><b>${esc(title)}</b>${opts.map((o,i)=>`<button data-choice="${i}">${esc(o[0])}</button>`).join('')}<button data-close="1">Отмена</button></div></div>`;$('modalBg').onclick=e=>{if(e.target.id==='modalBg')closeModal()};document.querySelectorAll('[data-choice]').forEach(b=>b.onclick=()=>{const fn=opts[Number(b.dataset.choice)][1];closeModal();if(fn)fn()});document.querySelector('[data-close]').onclick=closeModal}function closeModal(){$('modalRoot').innerHTML=''}
+function tourMenu(id){const t=tours.find(x=>x.id===id);if(!t)return;modal('Действия с турниром',[['Открыть',()=>openTour(id)],['Переименовать',()=>{let n=prompt('Новое название',t.name);if(n&&n.trim()){t.name=n.trim();save();renderHome()}}],['Копировать',()=>{let cp=JSON.parse(JSON.stringify(t));cp.id=uid();cp.name+=' — копия';tours.push(cp);save();renderHome()}],['Удалить',()=>{if(confirm('Удалить турнир?')){tours=tours.filter(x=>x.id!==id);save();renderHome()}}]])}
+function newBattle(format=2,slots=null){return {id:uid(),format,slots:slots?slots.slice():Array(format).fill(null),winner:null,next:null,nextSlot:null}}
+function makeRounds(names){
+  const rounds=[];let first=[],i=0;
+  // Pair participants normally. If the roster is odd, the final three share one 3-corner bout.
+  const hasTriple=names.length%2===1;
+  const pairedEnd=hasTriple?names.length-3:names.length;
+  for(;i<pairedEnd;i+=2)first.push(newBattle(2,[names[i]||null,names[i+1]||null]));
+  if(hasTriple)first.push(newBattle(3,[names[i]||null,names[i+1]||null,names[i+2]||null]));
+  rounds.push(first);
+  let count=first.length;
+  while(count>1){
+    const nextCount=Math.floor(count/2),next=[];
+    for(let j=0;j<nextCount;j++)next.push(newBattle(2));
+    if(count%2===1&&next.length){const last=next[next.length-1];last.format=3;last.slots=[null,null,null]}
+    rounds.push(next);count=nextCount;
+  }
+  rebuildLinksFor(rounds);return rounds;
+}
+function rebuildLinksFor(rounds){
+  for(let r=0;r<rounds.length;r++){
+    const round=rounds[r],next=rounds[r+1];
+    round.forEach((b,i)=>{
+      if(!next||!next.length){b.next=null;b.nextSlot=null;return}
+      const count=round.length,hasTriple=count%2===1&&count>=3;
+      if(hasTriple&&i>=count-3){b.next=next[next.length-1].id;b.nextSlot=i-(count-3);return}
+      const targetIndex=Math.floor(i/2);
+      if(!next[targetIndex]){b.next=null;b.nextSlot=null;return}
+      b.next=next[targetIndex].id;b.nextSlot=i%2;
+    });
+    // Every odd source round groups its final three fights into a single 3-corner target.
+    if(next&&round.length%2===1&&round.length>=3){const target=next[next.length-1];target.format=3;target.slots=Array.from({length:3},(_,i)=>target.slots?.[i]??null)}
+  }
+}
+function rebuildBracketFromFirst(){
+  const first=current.rounds[0]||[];const rebuilt=[first];let count=first.length;
+  while(count>1){
+    const nextCount=Math.floor(count/2),next=[];
+    for(let i=0;i<nextCount;i++)next.push(newBattle(2));
+    if(count%2===1&&next.length){next[next.length-1].format=3;next[next.length-1].slots=[null,null,null]}
+    rebuilt.push(next);count=nextCount;
+  }
+  current.rounds=rebuilt;rebuildLinksFor(current.rounds);
+}
+function normalizeRounds(){
+  if(!current.rounds||!current.rounds.length)return;
+  // Rebuild downstream structure from the current number of fights in round one.
+  const first=current.rounds[0];
+  const rebuilt=[first];let count=first.length;
+  while(count>1){
+    const nextCount=Math.floor(count/2),next=[];
+    for(let i=0;i<nextCount;i++)next.push(newBattle(2));
+    if(count%2===1&&next.length){next[next.length-1].format=3;next[next.length-1].slots=[null,null,null]}
+    rebuilt.push(next);count=nextCount;
+  }
+  current.rounds=rebuilt;rebuildLinksFor(current.rounds);
+}
+function openTour(id){current=tours.find(t=>t.id===id);if(!current)return;history=[];if(!current.rounds)current.rounds=makeRounds(current.names);rebuildLinks();renderDetail();show('detail')}
+function snap(){history.push(JSON.stringify(current));if(history.length>50)history.shift()}function battleById(id){for(const r of current.rounds)for(const b of r)if(b.id===id)return b;return null}function allBattles(){return current.rounds.flat()}
+function renderDetail(){if(!current)return;$('detailTitle').textContent=current.name;$('detailMeta').textContent=`${current.names.length} участников · ${current.rounds.length} раундов`;const root=$('bracket');root.innerHTML='';current.rounds.forEach((round,ri)=>{const col=document.createElement('div');col.className='round';col.innerHTML=`<h3>Раунд ${ri+1}</h3>`;round.forEach((b,bi)=>{while(b.slots.length<b.format)b.slots.push(null);const card=document.createElement('div');card.className='battle'+(b.format===3?' three':'');card.dataset.bid=b.id;card.innerHTML=`<div class="battlehead"><span>Бой ${bi+1}</span><span>${b.format===3?'3 угла':'1 на 1'}</span></div>`;for(let si=0;si<b.format;si++){const n=b.slots[si]||null;const slot=document.createElement('div');slot.className='slot';if(!n)slot.classList.add('empty');else if(b.winner===n)slot.classList.add('winner');else if(b.winner)slot.classList.add('loser');slot.innerHTML=`<span class="nm">${n?esc(n):'＋ Назначить участника'}</span>${n?'<button type="button">Победа</button>':''}`;if(ri===0){slot.onclick=e=>{if(e.target.closest('button'))return;chooseParticipant(b.id,si)}}else{slot.classList.add('locked');slot.style.cursor='default';slot.title='Состав участников меняется только в первом раунде'};if(n)slot.querySelector('button').onclick=e=>{e.stopPropagation();pickWinner(b.id,n)};card.appendChild(slot)}if(ri===0){const tools=document.createElement('div');tools.className='tools no-print';tools.innerHTML='<button type="button" class="formatToggle">Формат: '+(b.format===3?'3 угла':'1×1')+'</button><button type="button" class="delete">Удалить бой</button>';tools.children[0].onclick=()=>setFormat(b.id,b.format===2?3:2);tools.children[1].onclick=()=>deleteBattle(b.id);card.appendChild(tools)}col.appendChild(card)});if(ri===0){const add=document.createElement('button');add.type='button';add.className='addBattleBtn no-print';add.textContent='＋ Добавить бой';add.onclick=addFirstRoundBattle;col.appendChild(add)}root.appendChild(col)});requestAnimationFrame(drawConnectors)}
+function drawConnectors(){const root=$('bracket');if(!root||!current)return;root.querySelectorAll('svg.connectors').forEach(s=>s.remove());const rect=root.getBoundingClientRect(),width=root.scrollWidth,height=root.scrollHeight;const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.classList.add('connectors');svg.setAttribute('width',width);svg.setAttribute('height',height);svg.style.cssText='position:absolute;left:0;top:0;overflow:visible;pointer-events:none;z-index:0';for(const round of current.rounds.slice(0,-1))for(const b of round){if(!b.next||!battleById(b.next))continue;const fromCard=root.querySelector(`[data-bid="${b.id}"]`),toCard=root.querySelector(`[data-bid="${b.next}"]`);if(!fromCard||!toCard)continue;const fromSlots=fromCard.querySelectorAll('.slot'),toSlots=toCard.querySelectorAll('.slot');if(!fromSlots.length||!toSlots.length||!toSlots[b.nextSlot??0])continue;const source=fromSlots[fromSlots.length-1].getBoundingClientRect(),dest=toSlots[b.nextSlot??0].getBoundingClientRect();const x1=source.right-rect.left+ $('workspace').scrollLeft,y1=source.top+source.height/2-rect.top+$('workspace').scrollTop,x2=dest.left-rect.left+$('workspace').scrollLeft,y2=dest.top+dest.height/2-rect.top+$('workspace').scrollTop,mid=(x1+x2)/2;const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',`M${x1},${y1} H${mid} V${y2} H${x2}`);path.setAttribute('class','connector '+(b.winner?'active':'inactive'));path.setAttribute('marker-end','url(#arrow)');svg.appendChild(path)}const defs=document.createElementNS('http://www.w3.org/2000/svg','defs'),marker=document.createElementNS('http://www.w3.org/2000/svg','marker');marker.setAttribute('id','arrow');marker.setAttribute('markerWidth','7');marker.setAttribute('markerHeight','7');marker.setAttribute('refX','5');marker.setAttribute('refY','3');marker.setAttribute('orient','auto');const tri=document.createElementNS('http://www.w3.org/2000/svg','path');tri.setAttribute('d','M0,0 L6,3 L0,6 z');tri.setAttribute('fill','#b58aff');marker.appendChild(tri);defs.appendChild(marker);svg.appendChild(defs);root.prepend(svg)}
+function rebuildLinks(){rebuildLinksFor(current.rounds)}
+function addFirstRoundBattle(){
+  if(!current)return;
+  if(!confirm('Добавить пустой бой? Сетка следующих раундов будет пересобрана, результаты предыдущих раундов сбросятся.'))return;
+  snap();
+  current.rounds[0].push(newBattle(2));
+  // Round structure must reflect the new number of fights. Keep first-round slots, rebuild later rounds.
+  rebuildBracketFromFirst();current.done=false;syncCurrent();renderDetail();
+}
+function deleteBattle(id){
+  const ri=current.rounds.findIndex(r=>r.some(b=>b.id===id));if(ri<0)return;
+  if(!confirm('Удалить этот бой? Стрелки следующих раундов будут перестроены.'))return;
+  snap();const round=current.rounds[ri],index=round.findIndex(b=>b.id===id),removed=round[index];
+  if(removed.next){const next=battleById(removed.next);if(next){const slot=removed.nextSlot??0,old=next.slots[slot];next.slots[slot]=null;if(next.winner===old)next.winner=null;clearDownstream(next)}}
+  round.splice(index,1);if(!current.rounds[0].length)current.rounds[0]=[];
+  rebuildBracketFromFirst();current.done=false;syncCurrent();renderDetail();
+}
+function chooseParticipant(bid,slotIndex){const b=battleById(bid);if(!b)return;const used=new Set(allBattles().flatMap(x=>x.slots.filter(Boolean)));const currentName=b.slots[slotIndex];const available=current.names.filter(n=>!used.has(n)||n===currentName);const options=[['— Очистить слот',()=>moveParticipant(bid,slotIndex,null)],...available.map(n=>[n,()=>moveParticipant(bid,slotIndex,n)])];modal('Участник для этого слота',options)}
+function moveParticipant(bid,slotIndex,name){snap();if(name){for(const b of allBattles()){b.slots=b.slots.map((n,i)=>(n===name&&!(b.id===bid&&i===slotIndex))?null:n);if(b.winner===name)b.winner=null}}const target=battleById(bid);target.slots[slotIndex]=name;target.winner=null;clearDownstream(target);current.done=false;syncCurrent();renderDetail()}
+function clearDownstream(b){if(!b.next)return;const next=battleById(b.next);if(!next)return;const slot=b.nextSlot??0;const old=next.slots[slot];next.slots[slot]=null;if(next.winner===old)next.winner=null;clearDownstream(next)}
+function pickWinner(bid,name){const b=battleById(bid);if(!b||!b.slots.includes(name))return;snap();const oldWinner=b.winner;b.winner=name;if(b.next){const next=battleById(b.next);if(next){const slot=b.nextSlot??0,prior=next.slots[slot];if(prior&&prior!==name){/* Keep every contestant in their original battle; only replace the destination slot. */if(next.winner===prior)next.winner=null;clearDownstream(next)}next.slots[slot]=name;next.winner=null}}current.done=current.rounds[current.rounds.length-1].every(x=>x.winner);syncCurrent();renderDetail()}
+function formatMenu(id){modal('Формат боя',[['1 на 1',()=>setFormat(id,2)],['3 угла',()=>setFormat(id,3)]])}function setFormat(id,n){snap();const b=battleById(id);if(n===3){b.format=3;if(b.slots.length<3)b.slots.push(null)}else{if(b.slots[2]){const third=b.slots[2];current.names.includes(third);b.slots[2]=null}b.format=2;b.slots=b.slots.slice(0,2)}b.winner=null;clearDownstream(b);current.done=false;syncCurrent();renderDetail()}
+function clearBattle(id){snap();const b=battleById(id);b.slots=b.slots.map(()=>null);b.winner=null;clearDownstream(b);current.done=false;syncCurrent();renderDetail()}
+function addNameRow(value=''){const wrap=$('participantRows'),row=document.createElement('div');row.className='participantRow';const no=document.createElement('span');no.className='rowNo';no.textContent=String(wrap.children.length+1)+'.';const input=document.createElement('input');input.type='text';input.className='participantName';input.placeholder='Участник '+(wrap.children.length+1);input.value=value;input.autocomplete='off';row.append(no,input);wrap.append(row)}function resetNameRows(){const wrap=$('participantRows');wrap.innerHTML='';for(let i=0;i<3;i++)addNameRow()}$('newBtn').onclick=()=>{show('create');$('tourName').value='';$('randomizeNames').checked=false;resetNameRows()};$('addNameRow').onclick=()=>addNameRow();$('cancelCreate').onclick=()=>{show('home');renderHome()};$('createBtn').onclick=()=>{let names=[...document.querySelectorAll('.participantName')].map(x=>x.value.trim()).filter(Boolean);if(names.length<2){alert('Добавь минимум двух участников.');return}if(new Set(names.map(n=>n.toLowerCase())).size!==names.length){alert('Имена участников должны быть уникальными.');return}if($('randomizeNames').checked){for(let i=names.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[names[i],names[j]]=[names[j],names[i]]}}const roster=[...names];current={id:uid(),name:$('tourName').value.trim()||'Новый турнир',names:roster,rounds:makeRounds(roster),done:false};if(!$('randomizeNames').checked){current.rounds[0].forEach(b=>b.slots=[null,null].concat(b.format===3?[null]:[]));}tours.push(current);save();openTour(current.id)};$('homeBtn').onclick=()=>{show('home');renderHome()};$('back').onclick=()=>{show('home');renderHome()};$('undo').onclick=()=>{if(!history.length)return;current=JSON.parse(history.pop());syncCurrent();renderDetail()};$('addParticipant').onclick=()=>{const n=prompt('Имя нового участника');if(!n||!n.trim())return;if(current.names.some(x=>x.toLowerCase()===n.trim().toLowerCase())){alert('Такой участник уже есть.');return}snap();current.names.push(n.trim());const first=current.rounds[0];let found=false;for(const b of first){const ix=b.slots.findIndex(x=>!x);if(ix>=0){b.slots[ix]=n.trim();found=true;break}}if(!found)first.push({id:uid(),format:2,slots:[n.trim(),null],winner:null,next:null,nextSlot:null});current.done=false;syncCurrent();renderDetail()};$('printBtn').onclick=()=>window.print();document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderHome()});window.addEventListener('resize',()=>requestAnimationFrame(drawConnectors));$('workspace').addEventListener('scroll',()=>requestAnimationFrame(drawConnectors));function applyZoom(){const bracket=$('bracket');bracket.style.zoom=String(bracketZoom);$('zoomLabel').textContent=Math.round(bracketZoom*100)+'%';requestAnimationFrame(drawConnectors)}$('zoomIn').onclick=()=>{bracketZoom=Math.min(1.8,Math.round((bracketZoom+.1)*10)/10);applyZoom()};$('zoomOut').onclick=()=>{bracketZoom=Math.max(.4,Math.round((bracketZoom-.1)*10)/10);applyZoom()};$('zoomReset').onclick=()=>{bracketZoom=1;applyZoom()};$('workspace').addEventListener('touchstart',e=>{if(e.touches.length===2){pinchStart={distance:Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY),zoom:bracketZoom}}},{passive:true});$('workspace').addEventListener('touchmove',e=>{if(e.touches.length===2&&pinchStart){e.preventDefault();const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);bracketZoom=Math.max(.4,Math.min(1.8,pinchStart.zoom*d/pinchStart.distance));applyZoom()}},{passive:false});$('workspace').addEventListener('touchend',e=>{if(e.touches.length<2)pinchStart=null});resetNameRows();renderHome();show('home');
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script></body></html>
